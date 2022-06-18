@@ -329,12 +329,11 @@ applicationContext.xml
     <!-- 引入properties文件 -->
     <context:property-placeholder location="classpath:db.properties"/>
     <!--数据源的配置-->
-    <bean id="pooledDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
-        <!--注入属性-->
-        <property name="driverClass" value="${jdbc.driver}"></property>
-        <property name="jdbcUrl" value="${jdbc.url}"></property>
-        <property name="user" value="${jdbc.username}"></property>
-        <property name="password" value="${jdbc.password}"></property>
+    <bean id="pooledDataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
     </bean>
 
     <!-- step3: spring 与 mybatis 整合 -->
