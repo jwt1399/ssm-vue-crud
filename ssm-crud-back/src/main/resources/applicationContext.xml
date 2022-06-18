@@ -14,14 +14,6 @@
     <!-- 引入properties文件 -->
     <context:property-placeholder location="classpath:db.properties"/>
     <!--数据源的配置-->
-<!--    <bean id="pooledDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">-->
-<!--        &lt;!&ndash;注入属性&ndash;&gt;-->
-<!--        <property name="driverClass" value="${jdbc.driver}"></property>-->
-<!--        <property name="jdbcUrl" value="${jdbc.url}"></property>-->
-<!--        <property name="user" value="${jdbc.username}"></property>-->
-<!--        <property name="password" value="${jdbc.password}"></property>-->
-<!--    </bean>-->
-
     <bean id="pooledDataSource" class="com.alibaba.druid.pool.DruidDataSource">
         <property name="driverClassName" value="${jdbc.driver}"/>
         <property name="url" value="${jdbc.url}"/>
@@ -50,7 +42,6 @@
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <!--扫描所有的 mapper 接口的实现，加入到 IOC 容器中-->
         <property name="basePackage" value="com.jianjian.crud.mapper"></property>
-<!--        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>-->
     </bean>
 
     <!-- step6: 配置事务控制 -->
@@ -77,16 +68,5 @@
             <tx:method name="get*" read-only="true"/>
         </tx:attributes>
     </tx:advice>
-
-    <!-- 配置事务增强，事务如何切入 -->
-<!--    <tx:advice id="txAdvice" transaction-manager="transactionManager">-->
-<!--        <tx:attributes>-->
-<!--            &lt;!&ndash; 传播行为 &ndash;&gt;-->
-<!--            <tx:method name="post*" propagation="REQUIRED"/>-->
-<!--            <tx:method name="put*" propagation="REQUIRED"/>-->
-<!--            <tx:method name="delete*" propagation="REQUIRED"/>-->
-<!--            <tx:method name="get*" propagation="SUPPORTS" read-only="true"/>-->
-<!--        </tx:attributes>-->
-<!--    </tx:advice>-->
 
 </beans>

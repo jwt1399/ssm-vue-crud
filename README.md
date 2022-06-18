@@ -1,6 +1,6 @@
 <h1 align="center" >基于 SSM-VUE 前后端分离的 CRUD</h1>
 
-<h5 align="center">旨在帮你学习 SSM 整合</h5>
+<h5 align="center">旨在帮您学习 SSM 整合</h5>
 
 ## 一、项目概览
 
@@ -49,11 +49,56 @@
 
 ![](https://img.jwt1399.top/img/202206181716759.png)
 
-### 项目部署
+## 二、项目部署
 
+### 后端部署
 
+#### 1.克隆本项目到本地
 
-## 二、后端实现
+```bash
+git clone https://github.com/jwt1399/SSM-VUE-CRUD.git
+```
+
+#### 2.创建数据库导入数据
+
+先创建一个名为 ssm_crud 的数据库，然后再导入表数据 `ssm_crud.sql`
+
+#### 3.安装依赖
+
+使用 IDEA 打开项目下的 ssm-crud-back ，等待 Maven 将 pom.xml 中的依赖下载完
+
+#### 4.修改数据库配置
+
+找到 src/main/resouces/db.properties 修改成你自己的数据库配置
+
+```properties
+jdbc.driver=com.mysql.cj.jdbc.Driver
+jdbc.url=jdbc:mysql://localhost:3306/ssm_crud?useUnicode=true&characterEncoding=utf8
+jdbc.username=root
+jdbc.password=root
+```
+
+#### 5.添加TomCat
+
+- 点击 Add Configuration(添加配置) 进行配置， 点击 + 号，找到 Tomcat Service -> Local(本地)
+- 再点击 Tomcat 配置界面的 Deployment(部署)，再点击右下角的 fix ，选择 ssm-crud-back:war exploded，再将 Application context(应用程序上下文) 改为 /ssm_crud_back
+- 再将服务器 URL 改为"http://localhost:8080/ssm_crud_back/"，修改后应用即可
+
+#### 6.启动项目
+
+配置完 TomCat 后运行项目，浏览器会打开"http://localhost:8080/ssm_crud_back/"，显示“SSM-VUE-CRUD后端部署成功！！！”的文字，表示后端运行成功
+
+### 前端部署
+
+### 1.安装依赖
+
+使用 VScode 打开项目下的 ssm-crud-front，打开终端执行 `npm i` 下载依赖
+
+#### 2.启动项目
+
+终端再执行 `npm run serve` 运行项目，编译完成后会浏览器会自动打开 "http://0.0.0.0:8084/#/"（可在vue.config.修改），看到项目展示中的页面就说明部署成功啦。
+
+## 三、后端实现
 
 ### 1.环境搭建
 
@@ -110,11 +155,11 @@
       <version>2.0.7</version>
   </dependency>
 
-  <!-- 数据库连接池，c3p0 -->
+  <!-- 数据库连接池，druid -->
   <dependency>
-      <groupId>com.mchange</groupId>
-      <artifactId>c3p0</artifactId>
-      <version>0.9.5.5</version>
+    <groupId>com.alibaba</groupId>
+    <artifactId>druid</artifactId>
+    <version>1.2.10</version>
   </dependency>
 
   <!-- mysql驱动包 -->
@@ -137,18 +182,13 @@
       <artifactId>pagehelper</artifactId>
       <version>5.3.0</version>
   </dependency>
-
-
-
-  <!-- Json -->
-  <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+  
+  <!-- jackson-databind -->
   <dependency>
     <groupId>com.fasterxml.jackson.core</groupId>
     <artifactId>jackson-databind</artifactId>
-    <version>2.10.0</version>
+    <version>2.13.3</version>
   </dependency>
-
-
 </dependencies>
 ```
 
@@ -249,13 +289,7 @@
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
     </context:component-scan>
 
-    <!-- step2: 配置视图解析器 -->
-    <bean id="defaultViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="prefix" value="/WEB-INF/"/>
-        <property name="suffix" value=".html"/>
-    </bean>
-
-    <!-- step3: 标准配置 -->
+    <!-- step2: 标准配置 -->
     <!-- 将 Spring MVC 不能处理的请求交给 tomcat 处理 -->
     <mvc:default-servlet-handler/>
     <!-- 简化注解配置，并提供更高级的功能 -->
@@ -352,18 +386,6 @@ applicationContext.xml
             <tx:method name="get*" read-only="true"/>
         </tx:attributes>
     </tx:advice>
-
-    <!-- 配置事务增强，事务如何切入 -->
-<!--    <tx:advice id="txAdvice" transaction-manager="transactionManager">-->
-<!--        <tx:attributes>-->
-<!--            &lt;!&ndash; 传播行为 &ndash;&gt;-->
-<!--            <tx:method name="post*" propagation="REQUIRED"/>-->
-<!--            <tx:method name="put*" propagation="REQUIRED"/>-->
-<!--            <tx:method name="delete*" propagation="REQUIRED"/>-->
-<!--            <tx:method name="get*" propagation="SUPPORTS" read-only="true"/>-->
-<!--        </tx:attributes>-->
-<!--    </tx:advice>-->
-
 </beans>
 ```
 
@@ -1175,7 +1197,7 @@ public interface EmployeeMapper {
 </delete>
 ```
 
-## 三、前端实现
+## 四、前端实现
 
 ### 1.项目构建
 

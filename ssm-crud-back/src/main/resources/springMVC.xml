@@ -14,13 +14,7 @@
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
     </context:component-scan>
 
-    <!-- step2: 配置视图解析器 -->
-<!--    <bean id="defaultViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
-<!--        <property name="prefix" value="/WEB-INF/"/>-->
-<!--        <property name="suffix" value=".html"/>-->
-<!--    </bean>-->
-
-    <!-- step3: 标准配置 -->
+    <!-- step2: 标准配置 -->
     <!-- 将 Spring MVC 不能处理的请求交给 tomcat 处理 -->
     <mvc:default-servlet-handler/>
     <!-- 简化注解配置，并提供更高级的功能 -->
