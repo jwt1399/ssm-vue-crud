@@ -82,11 +82,11 @@ jdbc.password=root
 
 - 点击 Add Configuration(添加配置) 进行配置， 点击 + 号，找到 Tomcat Service -> Local(本地)
 - 再点击 Tomcat 配置界面的 Deployment(部署)，再点击右下角的 fix ，选择 ssm-crud-back:war exploded，再将 Application context(应用程序上下文) 改为 /ssm_crud_back
-- 再将服务器 URL 改为"http://localhost:8080/ssm_crud_back/"，修改后应用即可
+- 再将服务器 URL 改为"`http://localhost:8080/ssm_crud_back/`"，修改后应用即可
 
 #### 6.启动项目
 
-配置完 TomCat 后运行项目，浏览器会打开"http://localhost:8080/ssm_crud_back/"，显示“SSM-VUE-CRUD后端部署成功！！！”的文字，表示后端运行成功
+配置完 TomCat 后运行项目，浏览器会打开"`http://localhost:8080/ssm_crud_back/`"，显示“SSM-VUE-CRUD后端部署成功！！！”的文字，表示后端运行成功
 
 ### 前端部署
 
@@ -96,8 +96,7 @@ jdbc.password=root
 
 #### 2.启动项目
 
-终端再执行 `npm run serve` 运行项目，编译完成后会浏览器会自动打开 "http://0.0.0.0:8084/#/"（可在vue.config.修改），看到项目展示中的页面就说明部署成功啦。
-
+终端再执行 `npm run serve` 运行项目，编译完成后会浏览器会自动打开 "`http://0.0.0.0:8084/#/`"（可在vue.config.修改），当看到项目展示中的页面就说明部署成功啦。
 ## 三、后端实现
 
 ### 1.环境搭建
