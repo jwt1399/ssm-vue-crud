@@ -1,0 +1,36 @@
+<template>
+  <Header/>
+  <router-view/>
+  <Footer/>   
+</template>
+
+
+<script setup>
+import Header from '@/components/Header.vue'
+import Footer from '@/components/Footer.vue'
+</script>
+
+
+
+<style>
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* text-align: center; */
+  /* color: #2c3e50; */
+}
+</style>
+
+
+<!-- 不使用script setup语法糖 -->
+<!-- <script>
+import Header from '@/components/Header.vue'
+import Footer from '@/components/Footer.vue'
+export default {
+    components: {
+        Header,
+        Footer,
+    }
+}
+</script> -->

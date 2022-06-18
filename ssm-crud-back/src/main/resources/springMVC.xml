@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!-- step1: 配置Controller扫描方式 -->
+    <!-- 使用组件扫描的方式可以一次扫描多个Controller,只需指定包路径即可 -->
+    <context:component-scan base-package="com.jianjian" use-default-filters="false">
+        <!-- 一般在SpringMVC的配置里，只扫描Controller层，Spring配置中扫描所有包，但是排除Controller层。
+        context:include-filter要注意，如果base-package扫描的不是最终包，那么其他包还是会扫描、加载，如果在SpringMVC的配置中这么做，会导致Spring不能处理事务，
+        所以此时需要在<context:component-scan>标签上，增加use-default-filters="false"，就是真的只扫描context:include-filter包括的内容-->
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+    </context:component-scan>
+
+    <!-- step2: 配置视图解析器 -->
+<!--    <bean id="defaultViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
+<!--        <property name="prefix" value="/WEB-INF/"/>-->
+<!--        <property name="suffix" value=".html"/>-->
+<!--    </bean>-->
+
+    <!-- step3: 标准配置 -->
+    <!-- 将 Spring MVC 不能处理的请求交给 tomcat 处理 -->
+    <mvc:default-servlet-handler/>
+    <!-- 简化注解配置，并提供更高级的功能 -->
+    <!--能支持 Spring MVC 更高级的一些功能，比如 JSR 303 校验、快捷的 Ajax 映射动态请求等-->
+    <mvc:annotation-driven />
+
+
+</beans>

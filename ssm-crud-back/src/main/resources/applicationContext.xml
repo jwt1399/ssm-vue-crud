@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!-- step1: 配置包扫描方式。扫描所有包，但是排除Controller层 -->
+    <context:component-scan base-package="com.jianjian.crud">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <!-- step2: 配置数据库连接信息 -->
+    <!-- 引入properties文件 -->
+    <context:property-placeholder location="classpath:db.properties"/>
+    <!--数据源的配置-->
+<!--    <bean id="pooledDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">-->
+<!--        &lt;!&ndash;注入属性&ndash;&gt;-->
+<!--        <property name="driverClass" value="${jdbc.driver}"></property>-->
+<!--        <property name="jdbcUrl" value="${jdbc.url}"></property>-->
+<!--        <property name="user" value="${jdbc.username}"></property>-->
+<!--        <property name="password" value="${jdbc.password}"></property>-->
+<!--    </bean>-->
+
+    <bean id="pooledDataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
+
+    <!-- step3: spring 与 mybatis 整合 -->
+    <!-- 配置sqlSessionFactory，需要引入 mybatis-spring 包 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!-- 加载Mybatis全局配置文件 -->
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+        <!-- 数据库连接池 -->
+        <property name="dataSource" ref="pooledDataSource"/>
+        <!-- 配置mapper文件位置，扫描映射文件 -->
+        <property name="mapperLocations" value="classpath:mapper/*.xml"/>
+    </bean>
+
+    <!-- step4: 配置批量执行的sqlSession(可选操作) -->
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"/>
+        <constructor-arg name="executorType" value="BATCH"/>
+    </bean>
+
+    <!-- step5: 配置mapper扫描器，将 MyBatis 接口的实现加入到 IOC 容器中 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!--扫描所有的 mapper 接口的实现，加入到 IOC 容器中-->
+        <property name="basePackage" value="com.jianjian.crud.mapper"></property>
+<!--        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>-->
+    </bean>
+
+    <!-- step6: 配置事务控制 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <!-- 配置数据源 -->
+        <property name="dataSource" ref="pooledDataSource"/>
+    </bean>
+
+    <!-- 配置aop -->
+    <aop:config>
+        <!-- 切入点表达式 -->
+        <!-- 第一个*表示返回任意类型，第二个*表示任意方法，..service下任意子包，（..）表示任意数量和类型的参数-->
+        <aop:pointcut id="txPoint" expression="execution(* com.jianjian.crud.service..*(..))"/>
+        <!-- 配置事务增强，指定切点表达式-->
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="txPoint"/>
+    </aop:config>
+
+    <!-- 配置事务增强，事务如何增强-->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <!-- * 代表所有方法都是事务方法-->
+            <tx:method name="*"/>
+            <!-- get* 代表以get开始的所有方法-->
+            <tx:method name="get*" read-only="true"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <!-- 配置事务增强，事务如何切入 -->
+<!--    <tx:advice id="txAdvice" transaction-manager="transactionManager">-->
+<!--        <tx:attributes>-->
+<!--            &lt;!&ndash; 传播行为 &ndash;&gt;-->
+<!--            <tx:method name="post*" propagation="REQUIRED"/>-->
+<!--            <tx:method name="put*" propagation="REQUIRED"/>-->
+<!--            <tx:method name="delete*" propagation="REQUIRED"/>-->
+<!--            <tx:method name="get*" propagation="SUPPORTS" read-only="true"/>-->
+<!--        </tx:attributes>-->
+<!--    </tx:advice>-->
+
+</beans>
